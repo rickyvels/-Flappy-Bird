@@ -21,3 +21,8 @@ while ejecutando:
   clock.tick(Fps)
 
 pygame.quit()
+"""""
+dificultad
+arrancar desde un ejecutable
+no usar lib externas  
+"""

@@ -7,6 +7,12 @@ black=(0,0,0)
 
 Fps=60
 
+#pj
+player_size = 40      
+player_x = 100       
+player_y = 300       
+player_color = (255, 255, 0)  
+
 pygame.init()
 pygame.display.set_caption(" ")
 screen =pygame.display.set_mode((Ancho,Alto))
@@ -25,7 +31,7 @@ while ejecutando:
       sys.exit()
 
   
-
+pygame.draw.rect(screen, player_color, (player_x, player_y, player_size, player_size))
       
 clock.tick(Fps)
 

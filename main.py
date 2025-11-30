@@ -163,24 +163,31 @@ class Jugador:
         self.velocidad_y = 0
         self.gravedad = 0.9
         self.fuerza_salto = -12
-        self.fuerza_doble_salto = -10
+        self.fuerza_salto_extra = -10
         self.en_suelo = True
         self.rotacion = 0
-        self.puede_doble_salto = False
+        self.saltos_restantes = 0
         self.nivel_actual = nivel_actual
+        self.max_saltos = self._calcular_max_saltos()
+    
+    def _calcular_max_saltos(self):
+        """Calcula el máximo de saltos según el nivel"""
+        if self.nivel_actual >= 5:
+            return 4  # 5 saltos totales (4 adicionales)
+        elif self.nivel_actual >= 3:
+            return 1  # Doble salto (1 adicional)
+        return 0  # Solo salto normal
     
     def saltar(self):
         # Primer salto desde el suelo
         if self.en_suelo:
             self.velocidad_y = self.fuerza_salto
             self.en_suelo = False
-            # Habilitar doble salto solo desde nivel 3
-            if self.nivel_actual >= 3:
-                self.puede_doble_salto = True
-        # Doble salto en el aire (solo nivel 3 en adelante)
-        elif self.puede_doble_salto and self.nivel_actual >= 3:
-            self.velocidad_y = self.fuerza_doble_salto
-            self.puede_doble_salto = False
+            self.saltos_restantes = self.max_saltos
+        # Saltos adicionales en el aire
+        elif self.saltos_restantes > 0:
+            self.velocidad_y = self.fuerza_salto_extra
+            self.saltos_restantes -= 1
     
     def actualizar(self, obstaculos=None):
         # Aplicar física
@@ -200,9 +207,7 @@ class Jugador:
             self.y = SUELO_Y - self.tamaño
             self.velocidad_y = 0
             self.en_suelo = True
-            # Restaurar doble salto al tocar el suelo
-            if self.nivel_actual >= 3:
-                self.puede_doble_salto = False
+            self.saltos_restantes = 0
         
         # Colisión con bloques (solo desde arriba)
         if obstaculos:
@@ -220,9 +225,7 @@ class Jugador:
                         self.y = rect_obstaculo.top - self.tamaño
                         self.velocidad_y = 0
                         self.en_suelo = True
-                        # Restaurar doble salto al tocar bloque
-                        if self.nivel_actual >= 3:
-                            self.puede_doble_salto = False
+                        self.saltos_restantes = 0
     
     def dibujar(self, pantalla):
         # Crear superficie para rotación
@@ -320,21 +323,12 @@ class Nivel:
             tipo = item[0]
 
             if tipo == "pincho":
-                x = item[1]
-                self.obstaculos.append(Pincho(x))
-            
+                self.obstaculos.append(Pincho(item[1]))
             elif tipo == "minipincho":
-                x = item[1]
-                if len(item) > 2:
-                    y = item[2]
-                    self.obstaculos.append(MiniPincho(x, y))
-                else:
-                    self.obstaculos.append(MiniPincho(x))
-
-            elif tipo == "bloque":
-                if len(item) >= 5:
-                    x, y, ancho, alto = item[1], item[2], item[3], item[4]
-                    self.obstaculos.append(Bloque(x, y, ancho, alto))
+                y = item[2] if len(item) > 2 else None
+                self.obstaculos.append(MiniPincho(item[1], y))
+            elif tipo == "bloque" and len(item) >= 5:
+                self.obstaculos.append(Bloque(item[1], item[2], item[3], item[4]))
 
     def actualizar(self):
         for obstaculo in self.obstaculos[:]:
@@ -446,16 +440,17 @@ class Menu:
         texto_boton = fuente_boton.render("JUGAR", True, BLANCO)
         pantalla.blit(texto_boton, (ANCHO//2 - texto_boton.get_width()//2, 310))
         
-        fuente_instrucciones = pygame.font.SysFont(None, 25)
+        fuente_instrucciones = pygame.font.SysFont(None, 24)
         instrucciones = [
             "Controles:",
             "ESPACIO o CLICK para saltar",
-            "DOBLE SALTO desde Nivel 3",
+            "Nivel 3-4: DOBLE SALTO",
+            "Nivel 5: 5 SALTOS",
             "¡Evita los pinchos!"
         ]
         for i, linea in enumerate(instrucciones):
             texto = fuente_instrucciones.render(linea, True, VERDE)
-            pantalla.blit(texto, (ANCHO//2 - texto.get_width()//2, 420 + i * 30))
+            pantalla.blit(texto, (ANCHO//2 - texto.get_width()//2, 400 + i * 28))
         
         self.botones = [("jugar", boton_jugar)]
     
@@ -569,12 +564,21 @@ while ejecutando:
         # Mostrar número de nivel
         mostrar_mensaje(pantalla, f"Nivel {juego.nivel_actual}", BLANCO, 20, 30)
         
-        # Mostrar indicador de doble salto para niveles 3+
+        # Mostrar indicador de saltos para niveles 3+
         if juego.nivel_actual >= 3:
-            if juego.jugador.puede_doble_salto:
-                mostrar_mensaje(pantalla, "DOBLE SALTO LISTO", VERDE, 50, 25)
-            elif not juego.jugador.en_suelo:
-                mostrar_mensaje(pantalla, "Doble salto usado", (150, 150, 150), 50, 25)
+            if juego.nivel_actual >= 5:
+                tipo_salto = "5 SALTOS"
+            else:
+                tipo_salto = "DOBLE SALTO"
+                
+            if juego.jugador.en_suelo:
+                mostrar_mensaje(pantalla, f"{tipo_salto} LISTO", VERDE, 50, 25)
+            else:
+                if juego.jugador.saltos_restantes > 0:
+                    texto = f"Saltos restantes: {juego.jugador.saltos_restantes + 1}"
+                    mostrar_mensaje(pantalla, texto, AMARILLO, 50, 22)
+                else:
+                    mostrar_mensaje(pantalla, "Sin saltos", (150, 150, 150), 50, 25)
         
         # Mostrar mensajes
         if juego.mostrando_mensaje:

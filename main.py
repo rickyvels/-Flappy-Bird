@@ -64,31 +64,31 @@ NIVEL_2 = [
 ]
 
 NIVEL_3 = [
-    
-    ["pincho", 300],
+    ["pincho", 400],
+    ["minipincho", 440],
+    ["bloque", 700, SUELO_Y - 40, 120, 40],
 
-    
-    ["bloque", 600, SUELO_Y - 25, 120, 25],
+    ["bloque", 950, SUELO_Y - 70, 80, 25],
+    ["bloque", 1200, SUELO_Y - 80, 80, 25],
+    ["bloque", 1450, SUELO_Y - 90, 80, 25],
+    ["bloque", 1700, SUELO_Y - 100, 80, 25],
+    ["bloque", 1950, SUELO_Y - 110, 80, 25],
+    ["bloque", 2200, SUELO_Y - 120, 80, 25],
+    ["bloque", 2450, SUELO_Y - 130, 80, 25],
 
-    # BLOQUES FLOTANTES 
-    ["bloque", 900, SUELO_Y - 70, 80, 25],
-    ["bloque", 1080, SUELO_Y - 80, 80, 25],
-    ["bloque", 1260, SUELO_Y - 90, 80, 25],
+    ["minipincho", 920], ["minipincho", 950], ["minipincho", 980], ["minipincho", 1010], ["minipincho", 1040], ["minipincho", 1070], ["minipincho", 1100], ["minipincho", 1130],
+    ["minipincho", 1160], ["minipincho", 1190], ["minipincho", 1220], ["minipincho", 1250], ["minipincho", 1280], ["minipincho", 1310], ["minipincho", 1340], ["minipincho", 1370],
+    ["minipincho", 1400], ["minipincho", 1430], ["minipincho", 1460], ["minipincho", 1490], ["minipincho", 1520], ["minipincho", 1550], ["minipincho", 1580], ["minipincho", 1610],
+    ["minipincho", 1640], ["minipincho", 1670], ["minipincho", 1700], ["minipincho", 1730], ["minipincho", 1760], ["minipincho", 1790], ["minipincho", 1820], ["minipincho", 1850],
+    ["minipincho", 1880], ["minipincho", 1910], ["minipincho", 1940], ["minipincho", 1970], ["minipincho", 2000], ["minipincho", 2030], ["minipincho", 2060], ["minipincho", 2090],
+    ["minipincho", 2120], ["minipincho", 2150], ["minipincho", 2180], ["minipincho", 2210], ["minipincho", 2240], ["minipincho", 2270], ["minipincho", 2300], ["minipincho", 2330],
+    ["minipincho", 2360], ["minipincho", 2390], ["minipincho", 2420], ["minipincho", 2450], ["minipincho", 2480], ["minipincho", 2510], ["minipincho", 2540], ["minipincho", 2570],
+    ["minipincho", 2600],
 
-    # Mini pinchos 
-    ["minipincho", 920],
-    ["minipincho", 950],
-    ["minipincho", 980],
-    ["minipincho", 1010],
-    ["minipincho", 1040],
-    ["minipincho", 1070],
-    ["minipincho", 1100],
-    ["minipincho", 1130],
-    ["minipincho", 1160],
-    ["minipincho", 1190],
-    ["minipincho", 1220],
-    ["minipincho", 1250],
-    ["minipincho", 1280],
+    ["bloque", 3040, SUELO_Y - 25, 100, 25],
+    ["bloque", 3200, SUELO_Y - 50, 90, 75],
+    ["pincho", 2800],
+    ["pincho", 3160],
 ]
 
 NIVEL_4 = [
@@ -129,7 +129,6 @@ NIVEL_4 = [
     ["minipincho", 3650, SUELO_Y - 51],
     ["minipincho", 3800, SUELO_Y - 51],
     ["minipincho", 3830, SUELO_Y - 51],
-
 
     ["bloque", 3850, SUELO_Y - 50, 200, 50],
     ["pincho", 4250],
